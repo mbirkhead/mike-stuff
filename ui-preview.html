@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clinical Assessment App — UI Preview</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: #1a1a2e;
+    min-height: 100vh;
+    padding: 40px 20px;
+  }
+  h1 {
+    color: #fff;
+    text-align: center;
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 8px;
+    letter-spacing: 0.3px;
+  }
+  .subtitle {
+    color: #888;
+    text-align: center;
+    font-size: 13px;
+    margin-bottom: 40px;
+  }
+  .screens {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 40px;
+    justify-content: center;
+    align-items: flex-start;
+  }
+  .screen-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+  }
+  .screen-label {
+    color: #aaa;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+  .phone {
+    width: 320px;
+    min-height: 620px;
+    background: #fff;
+    border-radius: 44px;
+    box-shadow: 0 30px 80px rgba(0,0,0,0.5), 0 0 0 8px #111, 0 0 0 10px #333;
+    overflow: hidden;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+  }
+  /* Notch */
+  .phone::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 50%; transform: translateX(-50%);
+    width: 120px; height: 30px;
+    background: #111;
+    border-radius: 0 0 20px 20px;
+    z-index: 10;
+  }
+  .screen-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding-top: 44px;
+    overflow: hidden;
+  }
+
+  /* ── Status bar ── */
+  .status-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 6px 20px 4px;
+    font-size: 11px;
+    font-weight: 600;
+    color: #111;
+  }
+
+  /* ── Login ── */
+  .login-screen {
+    flex: 1;
+    background: #F9FAFB;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 28px 24px;
+  }
+  .login-title { font-size: 26px; font-weight: 800; color: #111827; margin-bottom: 4px; }
+  .login-sub { font-size: 14px; color: #6B7280; margin-bottom: 28px; }
+  .input-field {
+    background: #fff;
+    border: 1.5px solid #E5E7EB;
+    border-radius: 10px;
+    padding: 13px 14px;
+    font-size: 14px;
+    color: #374151;
+    margin-bottom: 10px;
+  }
+  .btn-primary {
+    background: #2563EB;
+    border-radius: 10px;
+    padding: 15px;
+    text-align: center;
+    color: #fff;
+    font-size: 15px;
+    font-weight: 700;
+    margin-top: 6px;
+  }
+  .hipaa-note {
+    margin-top: 24px;
+    text-align: center;
+    font-size: 11px;
+    color: #9CA3AF;
+  }
+
+  /* ── Nav bar ── */
+  .nav-bar {
+    background: #fff;
+    border-bottom: 1px solid #E5E7EB;
+    padding: 12px 16px 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .nav-title { font-size: 17px; font-weight: 700; color: #111827; }
+  .nav-right { font-size: 13px; color: #6B7280; font-weight: 600; }
+
+  /* ── Schedule ── */
+  .schedule-screen { flex: 1; background: #F9FAFB; display: flex; flex-direction: column; }
+  .shift-bar {
+    background: #fff;
+    border-bottom: 1px solid #E5E7EB;
+    padding: 10px 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .shift-chip {
+    background: #D1FAE5;
+    border-radius: 20px;
+    padding: 6px 14px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #065F46;
+  }
+  .date-header {
+    padding: 14px 16px 6px;
+    font-size: 11px;
+    font-weight: 700;
+    color: #9CA3AF;
+    letter-spacing: 0.8px;
+  }
+  .appt-card {
+    background: #fff;
+    border-radius: 12px;
+    padding: 14px 16px;
+    margin: 5px 14px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.07);
+  }
+  .appt-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; }
+  .appt-time { font-size: 13px; font-weight: 700; color: #374151; }
+  .appt-name { font-size: 15px; font-weight: 600; color: #111827; margin-bottom: 2px; }
+  .appt-addr { font-size: 12px; color: #6B7280; }
+
+  .badge {
+    padding: 3px 8px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 600;
+  }
+  .badge-scheduled  { background: #EDE9FE; color: #5B21B6; }
+  .badge-en-route   { background: #DBEAFE; color: #1E40AF; }
+  .badge-on-site    { background: #FEF3C7; color: #92400E; }
+  .badge-completed  { background: #D1FAE5; color: #065F46; }
+  .badge-available  { background: #D1FAE5; color: #065F46; }
+  .badge-offline    { background: #F3F4F6; color: #6B7280; }
+
+  /* ── Appointment Detail ── */
+  .detail-screen { flex: 1; background: #F9FAFB; display: flex; flex-direction: column; overflow-y: auto; }
+  .detail-content { padding: 14px; flex: 1; }
+  .status-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
+  .appt-big-time { font-size: 18px; font-weight: 700; color: #374151; }
+  .section-card {
+    background: #fff;
+    border-radius: 12px;
+    padding: 14px;
+    margin-bottom: 10px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.07);
+  }
+  .section-label {
+    font-size: 10px;
+    font-weight: 700;
+    color: #9CA3AF;
+    letter-spacing: 0.8px;
+    margin-bottom: 6px;
+  }
+  .patient-name { font-size: 18px; font-weight: 700; color: #111827; margin-bottom: 4px; }
+  .detail-line { font-size: 13px; color: #374151; margin-bottom: 2px; }
+  .notes-text { font-size: 13px; color: #374151; line-height: 1.5; }
+  .btn-nav {
+    background: #2563EB;
+    border-radius: 10px;
+    padding: 14px;
+    text-align: center;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+  .btn-checkin {
+    background: #10B981;
+    border-radius: 10px;
+    padding: 14px;
+    text-align: center;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+
+  /* ── Admin Map ── */
+  .admin-screen { flex: 1; position: relative; display: flex; flex-direction: column; }
+  .map-bg {
+    flex: 1;
+    background: #e8eedc;
+    position: relative;
+    overflow: hidden;
+    min-height: 480px;
+  }
+  /* Road grid */
+  .road-h {
+    position: absolute;
+    left: 0; right: 0;
+    height: 6px;
+    background: rgba(255,255,255,0.7);
+  }
+  .road-v {
+    position: absolute;
+    top: 0; bottom: 0;
+    width: 6px;
+    background: rgba(255,255,255,0.7);
+  }
+  .map-block {
+    position: absolute;
+    background: #d4dcc8;
+    border-radius: 2px;
+  }
+  .clinician-pin {
+    position: absolute;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: 3px solid #10B981;
+    background: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 700;
+    color: #111827;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    transform: translate(-50%, -50%);
+  }
+  .clinician-pin.en-route { border-color: #3B82F6; }
+  .clinician-pin.on-site  { border-color: #F59E0B; }
+  .appt-pin {
+    position: absolute;
+    width: 12px; height: 12px;
+    background: #6366F1;
+    border-radius: 50%;
+    border: 2px solid #fff;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.25);
+    transform: translate(-50%, -50%);
+  }
+  .appt-pin-label {
+    position: absolute;
+    background: #fff;
+    border-radius: 6px;
+    padding: 2px 6px;
+    font-size: 10px;
+    font-weight: 600;
+    color: #374151;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.15);
+    white-space: nowrap;
+    transform: translate(-50%, -140%);
+  }
+  .legend-panel {
+    position: absolute;
+    top: 14px; right: 10px;
+    background: rgba(255,255,255,0.95);
+    border-radius: 12px;
+    padding: 10px 12px;
+    min-width: 160px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.12);
+  }
+  .legend-title { font-size: 10px; font-weight: 700; color: #6B7280; letter-spacing: 0.5px; margin-bottom: 8px; }
+  .legend-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; }
+  .legend-name { font-size: 12px; color: #111827; flex: 1; margin-right: 6px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .sign-out-btn {
+    position: absolute;
+    top: 14px; left: 10px;
+    background: rgba(255,255,255,0.95);
+    border-radius: 8px;
+    padding: 7px 11px;
+    font-size: 12px;
+    color: #6B7280;
+    font-weight: 600;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  }
+
+  /* ── Map color blocks for realism ── */
+  .map-bg { background: #eef2e6; }
+
+  /* divider */
+  .section-divider {
+    width: 100%;
+    height: 1px;
+    background: #E5E7EB;
+    margin: 6px 0 10px;
+  }
+</style>
+</head>
+<body>
+
+<h1>Clinical Assessment App</h1>
+<p class="subtitle">UI Preview — Expo React Native · iOS + Android</p>
+
+<div class="screens">
+
+  <!-- ── 1. LOGIN ── -->
+  <div class="screen-wrap">
+    <div class="screen-label">Login</div>
+    <div class="phone">
+      <div class="screen-content">
+        <div class="status-bar"><span>9:41</span><span>●●●</span></div>
+        <div class="login-screen">
+          <div class="login-title">Clinical Assessment</div>
+          <div class="login-sub">Sign in to continue</div>
+          <div class="input-field" style="color:#9CA3AF">sarah.chen@health.org</div>
+          <div class="input-field" style="color:#9CA3AF">••••••••</div>
+          <div class="btn-primary">Sign In</div>
+          <div class="hipaa-note">🔒 HIPAA-compliant · Encrypted storage</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── 2. CLINICIAN SCHEDULE ── -->
+  <div class="screen-wrap">
+    <div class="screen-label">Clinician — Schedule</div>
+    <div class="phone">
+      <div class="screen-content">
+        <div class="status-bar"><span>9:41</span><span>●●●</span></div>
+        <div class="nav-bar">
+          <div class="nav-title">Today's Schedule</div>
+          <div class="nav-right">Sign out</div>
+        </div>
+        <div class="schedule-screen">
+          <div class="shift-bar">
+            <div class="shift-chip">● On Shift</div>
+            <div style="font-size:12px;color:#6B7280">Wed Jun 18</div>
+          </div>
+          <div class="date-header">3 APPOINTMENTS</div>
+
+          <div class="appt-card">
+            <div class="appt-row">
+              <div class="appt-time">8:30 AM</div>
+              <div class="badge badge-completed">Completed</div>
+            </div>
+            <div class="appt-name">Margaret T. Williams</div>
+            <div class="appt-addr">142 Maple St, Springfield</div>
+          </div>
+
+          <div class="appt-card" style="border: 1.5px solid #2563EB;">
+            <div class="appt-row">
+              <div class="appt-time">10:15 AM</div>
+              <div class="badge badge-on-site">On Site</div>
+            </div>
+            <div class="appt-name">Robert J. Henderson</div>
+            <div class="appt-addr">87 Oak Avenue, Springfield</div>
+          </div>
+
+          <div class="appt-card">
+            <div class="appt-row">
+              <div class="appt-time">1:00 PM</div>
+              <div class="badge badge-scheduled">Scheduled</div>
+            </div>
+            <div class="appt-name">Dorothy M. Kaplan</div>
+            <div class="appt-addr">305 Birch Lane, Shelbyville</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── 3. APPOINTMENT DETAIL ── -->
+  <div class="screen-wrap">
+    <div class="screen-label">Clinician — Appointment</div>
+    <div class="phone">
+      <div class="screen-content">
+        <div class="status-bar"><span>10:22</span><span>●●●</span></div>
+        <div class="nav-bar">
+          <div style="font-size:13px;color:#2563EB">‹ Schedule</div>
+          <div class="nav-title" style="font-size:15px">Appointment</div>
+          <div style="width:60px"></div>
+        </div>
+        <div class="detail-screen">
+          <div class="detail-content">
+            <div class="status-row">
+              <div class="badge badge-on-site">On Site</div>
+              <div class="appt-big-time">10:15 AM</div>
+            </div>
+
+            <div class="section-card">
+              <div class="section-label">PATIENT</div>
+              <div class="patient-name">Robert J. Henderson</div>
+              <div class="detail-line">DOB: 03/14/1948</div>
+              <div class="detail-line">Phone: (555) 402-7731</div>
+              <div class="detail-line">Insurance ID: MED-84291-B</div>
+              <div class="section-divider"></div>
+              <div class="section-label">CLINICAL NOTES</div>
+              <div class="notes-text">Hx of COPD, currently on O₂ at 2L/min. Recently d/c from St. Mary's 6/12. Assess respiratory function and medication adherence. Fall risk — use gait belt.</div>
+            </div>
+
+            <div class="section-card">
+              <div class="section-label">LOCATION</div>
+              <div class="detail-line" style="font-size:14px;font-weight:600;color:#111827">87 Oak Avenue, Apt 4B</div>
+              <div class="detail-line">Springfield, IL 62701</div>
+            </div>
+
+            <div class="btn-nav">Navigate</div>
+            <div style="background:#F59E0B;border-radius:10px;padding:14px;text-align:center;color:#fff;font-size:14px;font-weight:700;">Check Out</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── 4. ADMIN MAP ── -->
+  <div class="screen-wrap">
+    <div class="screen-label">Admin — Live Map</div>
+    <div class="phone">
+      <div class="screen-content">
+        <div class="status-bar" style="background:#eef2e6"><span>9:41</span><span>●●●</span></div>
+        <div class="admin-screen">
+          <div class="map-bg">
+            <!-- Road grid -->
+            <div class="road-h" style="top:22%"></div>
+            <div class="road-h" style="top:44%"></div>
+            <div class="road-h" style="top:66%"></div>
+            <div class="road-v" style="left:18%"></div>
+            <div class="road-v" style="left:40%"></div>
+            <div class="road-v" style="left:62%"></div>
+            <div class="road-v" style="left:80%"></div>
+            <!-- City blocks -->
+            <div class="map-block" style="top:26%;left:21%;width:16%;height:15%;"></div>
+            <div class="map-block" style="top:26%;left:43%;width:16%;height:15%;"></div>
+            <div class="map-block" style="top:26%;left:65%;width:12%;height:15%;"></div>
+            <div class="map-block" style="top:47%;left:21%;width:16%;height:16%;"></div>
+            <div class="map-block" style="top:47%;left:43%;width:16%;height:16%;"></div>
+            <div class="map-block" style="top:47%;left:65%;width:12%;height:16%;"></div>
+            <div class="map-block" style="top:5%;left:21%;width:16%;height:14%;"></div>
+            <div class="map-block" style="top:5%;left:43%;width:16%;height:14%;"></div>
+            <div class="map-block" style="top:5%;left:65%;width:12%;height:14%;"></div>
+            <div class="map-block" style="top:70%;left:21%;width:16%;height:25%;"></div>
+            <div class="map-block" style="top:70%;left:43%;width:16%;height:25%;"></div>
+            <div class="map-block" style="top:70%;left:65%;width:12%;height:25%;"></div>
+
+            <!-- Appointment pins -->
+            <div style="position:absolute;top:35%;left:30%;">
+              <div class="appt-pin-label">R. Henderson · 10:15</div>
+              <div class="appt-pin"></div>
+            </div>
+            <div style="position:absolute;top:55%;left:52%;">
+              <div class="appt-pin-label">D. Kaplan · 1:00 PM</div>
+              <div class="appt-pin"></div>
+            </div>
+            <div style="position:absolute;top:18%;left:70%;">
+              <div class="appt-pin-label">L. Torres · 2:30 PM</div>
+              <div class="appt-pin"></div>
+            </div>
+
+            <!-- Clinician markers -->
+            <div class="clinician-pin on-site" style="top:33%;left:32%;">SC</div>
+            <div class="clinician-pin en-route" style="top:62%;left:48%;">MR</div>
+            <div class="clinician-pin" style="top:25%;left:68%;">JP</div>
+
+            <!-- Legend panel -->
+            <div class="legend-panel">
+              <div class="legend-title">ACTIVE CLINICIANS</div>
+              <div class="legend-row">
+                <div class="legend-name">S. Chen</div>
+                <div class="badge badge-on-site" style="font-size:10px;padding:2px 7px;">On Site</div>
+              </div>
+              <div class="legend-row">
+                <div class="legend-name">M. Rodriguez</div>
+                <div class="badge badge-en-route" style="font-size:10px;padding:2px 7px;">En Route</div>
+              </div>
+              <div class="legend-row">
+                <div class="legend-name">J. Patel</div>
+                <div class="badge badge-available" style="font-size:10px;padding:2px 7px;">Available</div>
+              </div>
+            </div>
+
+            <!-- Sign out -->
+            <div class="sign-out-btn">Sign out</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<p style="text-align:center;color:#555;font-size:12px;margin-top:40px;">
+  Expo SDK 52 · React Native · Supabase · expo-location · react-native-maps
+</p>
+
+</body>
+</html>
