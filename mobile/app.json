@@ -1,0 +1,45 @@
+{
+  "expo": {
+    "name": "ClinicalAssessment",
+    "slug": "clinical-assessment",
+    "version": "0.1.0",
+    "orientation": "portrait",
+    "scheme": "clinicalassessment",
+    "userInterfaceStyle": "light",
+    "ios": {
+      "bundleIdentifier": "net.birkhead.clinicalassessment",
+      "infoPlist": {
+        "NSLocationWhenInUseUsageDescription": "Your location is shared with dispatch while you are on shift.",
+        "NSLocationAlwaysAndWhenInUseUsageDescription": "Your location is tracked in the background while on shift so admin can monitor coverage.",
+        "NSLocationAlwaysUsageDescription": "Your location is tracked in the background while on shift."
+      }
+    },
+    "android": {
+      "package": "net.birkhead.clinicalassessment",
+      "permissions": [
+        "ACCESS_COARSE_LOCATION",
+        "ACCESS_FINE_LOCATION",
+        "ACCESS_BACKGROUND_LOCATION",
+        "FOREGROUND_SERVICE",
+        "RECEIVE_BOOT_COMPLETED"
+      ]
+    },
+    "plugins": [
+      "expo-router",
+      "expo-secure-store",
+      [
+        "expo-location",
+        {
+          "locationAlwaysAndWhenInUsePermission": "Your location is tracked while on shift."
+        }
+      ],
+      [
+        "expo-notifications",
+        {
+          "icon": "./assets/notification-icon.png",
+          "color": "#2563EB"
+        }
+      ]
+    ]
+  }
+}

@@ -1,0 +1,44 @@
+node_modules/
+.expo/
+dist/
+web-build/
+.env
+.env.local
+.env.*.local
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.DS_Store
+*.orig
+ios/
+android/
+.supabase/
+
+# Expo
+expo-env.d.ts
+.metro-health-check*
+
+# Native signing (HIPAA: never commit keys)
+*.jks
+*.p8
+*.p12
+*.key
+*.mobileprovision
+*.pem
+
+# TypeScript
+*.tsbuildinfo
+
+# Testing
+coverage/
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Supabase local dev
+supabase/.branches/
+supabase/.temp/
